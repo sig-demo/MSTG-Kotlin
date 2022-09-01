@@ -1,0 +1,33 @@
+name: "Coverity"
+
+on:
+  workflow_dispatch
+
+jobs:
+  build:
+    runs-on: Ubuntu-Latest
+    container:
+      image: fcbrbrazil/coverity:2022.6.0
+      credentials:
+        username: fcbrbrazil
+        password: ${{ secrets.docker_hub_password}}
+    env:
+      POLARIS_SERVER_URL:  ${{ secrets.POLARIS_SERVER_URL }}
+      POLARIS_ACCESS_TOKEN:  ${{ secrets.POLARIS_ACCESS_TOKEN }}
+      BLACKDUCK_URL: ${{ secrets.BLACKDUCK_URL}}
+      BLACKDUCK_API_TOKEN: ${{ secrets.BLACKDUCK_API_TOKEN }}
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET 5
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.100
+        distribution: 'adopt'
+    
+
+    # Perform Static Analysis
+    - name: Polaris (SAST)
+      run: |
+        cov-build --dir idir --fs-capture-search . dotnet build
+        cov-analyze --dir idir --all --webapp-security --enable-audit-mode
