@@ -1,0 +1,28 @@
+version: 2.1
+orbs:
+  android: circleci/android@1.0.3
+
+jobs:
+   build-and-test:  
+    executor:
+      name: android/android-machine
+
+    steps:
+      - checkout
+      - run:
+          name: Synopsys Polaris           
+          command: |
+            sudo mkdir /opt/polaris
+            PATH="/opt/polaris:$PATH"
+            wget -q https://poc163.polaris.synopsys.com/api/tools/polaris_cli-linux64.zip
+            sudo unzip -j polaris_cli-linux64.zip -d /opt/polaris
+            sudo chmod +x ./gradlew
+            polaris analyze --coverity-ignore-capture-failure
+            unset POLARIS_ACCESS_TOKEN  
+            bash <(curl -s -L https://detect.synopsys.com/detect7.sh) --blackduck.url=${HUB_URL} --blackduck.api.token=${HUB_TOKEN}
+workflows:
+  sample: 
+    jobs:
+      - build-and-test:
+          context:
+            - SIG
