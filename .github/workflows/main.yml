@@ -26,5 +26,5 @@ jobs:
         apt update
         apt install -y snap
         snap install --classic kotlin
-        cov-build --dir idir --fs-capture-search . dotnet build
+        cov-build --dir idir --fs-capture-search . kotlinc .
         cov-analyze --dir idir --all --webapp-security --enable-audit-mode
