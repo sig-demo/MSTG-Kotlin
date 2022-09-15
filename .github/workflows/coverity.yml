@@ -24,7 +24,12 @@ jobs:
     - name: Polaris (SAST)
       run: |
         apt update
-        apt install -y snap
-        snap install --classic kotlin
+        apt install -y zip
+        curl -s "https://get.sdkman.io" | bash
+        source "/root/.sdkman/bin/sdkman-init.sh"
+        cd /root/.sdkman/bin/
+        chmod +x sdkman-init.sh
+        sdk version
+        sdk install kotlin
         cov-build --dir idir --fs-capture-search . kotlinc .
         cov-analyze --dir idir --all --webapp-security --enable-audit-mode
