@@ -27,3 +27,4 @@ steps:
   inputs:
     polarisService: 'Demo'
     polarisCommand: 'analyze -w --coverity-ignore-capture-failure'
+    
