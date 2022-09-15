@@ -26,7 +26,7 @@ jobs:
         apt update
         apt install -y zip
         curl -s "https://get.sdkman.io" | bash
-        source "/root/.sdkman/bin/sdkman-init.sh"
+        source "/github/home/.sdkman/bin/sdkman-init.sh"
         cd /root/.sdkman/bin/
         chmod +x sdkman-init.sh
         sdk version
